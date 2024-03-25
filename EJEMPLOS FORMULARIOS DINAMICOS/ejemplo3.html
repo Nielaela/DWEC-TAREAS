@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript">
+        const marcar = () => {
+            document.getElementById("verano").checked = true;
+        }
+        const desmarcar = () => {
+            document.getElementById("verano").checked = false;
+        }
+
+        const identificar = (objeto) => {
+                let nombre = objeto.name;
+                let id = objeto.id;
+                let valor = objeto.value;
+                let tipo = objeto.type;
+                alert(`Datos del campo pulsado:\n\nNombre: ${nombre}\nID: ${id}\nValor: ${valor}\nTipo: ${tipo}`);
+            }
+    </script>
+    
+</head>
+
+<body>
+    <form action="" method="get">
+        <p>
+            <label for="nombre">Nombre: </label>
+            <input type="text" name="nombre" id="nombre" value="Bob" onclick="identificar(this)"/>
+            <label for="apellidos">Apellidos: </label>
+            <input type="text" name="apellidos" id="apellidos" value="Esponja" onclick="identificar(this)"/>
+            <label for="edad">Edad: </label>
+            <input type="number" name="edad" id="edad" value="18" onclick="identificar(this)"/>
+            <label for="pais">Pais: </label>
+            <label for="pais1">España: </label>
+            <input type="radio" name="pais" id="pais1" value="ES" onclick="identificar(this)"/>
+            <label for="pais2">Francia: </label>
+            <input type="radio" name="pais" id="pais2" value="FR" onclick="identificar(this)"/>
+        </p>
+        <p>
+            Haga click en cada uno de los campos para ver más información.
+        </p>
+        <label for="verano">¿Te gusta el verano?</label>
+        <input type="checkbox" id="verano" name="verano" value="Si" />
+    </form>
+    <button onclick="marcar()">Marcar Checkbox</button>
+    <button onclick="desmarcar()">Desmarcar Checkbox</button>
+</body>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Compras</title>
+    <style>
+        /* Estilo para resaltar productos completados */
+        .completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Lista de Compras</h2>
+
+<form id="comprasForm">
+    <ul id="listaCompras">
+        <!-- Lista de compras se agregará aquí -->
+    </ul>
+    <input type="text" id="nuevoProducto" placeholder="Agregar nuevo producto">
+    <input type="number" id="nuevaCantidad" placeholder="Cantidad" min="1">
+    <button type="button" onclick="agregarProducto()">Añadir Producto</button>
+    <button type="button" onclick="archivarCompras()">Archivar Compras</button>
+    <div id="aviso"></div>
+</form>
+
+<script>
+// Array para almacenar las compras archivadas
+var comprasArchivadas = [];
+
+function agregarProducto() {
+    var inputProducto = document.getElementById('nuevoProducto');
+    var inputCantidad = document.getElementById('nuevaCantidad');
+    
+    var productoText = inputProducto.value.trim();
+    var cantidad = inputCantidad.value.trim();
+
+    if (productoText !== "" && cantidad !== "" && !isNaN(cantidad) && parseInt(cantidad) > 0) {
+        // Crear nuevo elemento de lista
+        var nuevaCompra = document.createElement('li');
+
+        // Crear elementos para el producto y la cantidad
+        var spanProducto = document.createElement('span');
+        spanProducto.textContent = productoText + ' ';
+
+        var spanCantidad = document.createElement('span');
+        spanCantidad.innerHTML = cantidad + ' unidades '; // Agrega un espacio y la palabra "unidad"
+
+        var botonEliminar = document.createElement('button');
+        botonEliminar.type = 'button';
+        botonEliminar.onclick = function() { eliminarCompra(this); };
+        botonEliminar.textContent = 'Eliminar';
+
+        // Agregar elementos al nuevo elemento de lista
+        nuevaCompra.appendChild(spanProducto);
+        nuevaCompra.appendChild(spanCantidad);
+        nuevaCompra.appendChild(botonEliminar);
+
+        // Agregar la nueva compra a la lista
+        document.getElementById('listaCompras').appendChild(nuevaCompra);
+
+        // Limpiar los campos de entrada
+        inputProducto.value = "";
+        inputCantidad.value = "";
+    }
+}
+
+function eliminarCompra(button) {
+    // Eliminar la compra al hacer clic en el botón "Eliminar"
+    var compra = button.parentNode;
+    compra.parentNode.removeChild(compra);
+}
+
+function archivarCompras() {
+    // Archivar las compras
+    var listaCompras = document.getElementById('listaCompras');
+    var compras = listaCompras.getElementsByTagName('li');
+
+    for (var i = 0; i < compras.length; i++) {
+        var compra = compras[i];
+        var spanProducto = compra.querySelector('span:first-child');
+        var spanCantidad = compra.querySelector('span:nth-child(2)');
+
+        // Agregar la compra al array de compras archivadas
+        comprasArchivadas.push({
+            producto: spanProducto.textContent.trim(),
+            cantidad: spanCantidad.textContent.trim().replace('unidad', '')
+        });
+    }
+
+    // Limpiar la lista de compras
+    listaCompras.innerHTML = "";
+
+    // Puedes mostrar las compras archivadas en la consola o realizar otras acciones
+    console.log("Compras Archivadas:", comprasArchivadas);
+
+    // Mostrar mensaje de éxito
+    var aviso = document.getElementById('aviso');
+    aviso.textContent = 'Compras archivadas correctamente';
+    aviso.style.display = 'block';
+
+    // Ocultar el mensaje después de unos segundos (puedes ajustar el tiempo según tus necesidades)
+    setTimeout(function() {
+        aviso.style.display = 'none';
+    }, 3000); // Ocultar después de 3 segundos (3000 milisegundos)
+}
+</script>
+
+</body>
+</html>

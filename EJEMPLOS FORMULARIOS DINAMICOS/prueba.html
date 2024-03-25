@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Lista de Tareas</title>
+    <style>
+        /* Estilo para resaltar tareas completadas */
+        .completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Lista de Tareas</h2>
+
+<form id="tareasForm">
+    <ul id="listaTareas">
+        <!-- Lista de tareas se agregará aquí -->
+    </ul>
+    <input type="text" id="nuevaTarea" placeholder="Agregar nueva tarea">
+    <button type="button" onclick="agregarTarea()">Agregar Tarea</button>
+</form>
+
+<script>
+function agregarTarea() {
+    var inputTarea = document.getElementById('nuevaTarea');
+    var tareaText = inputTarea.value.trim();
+
+    if (tareaText !== "") {
+        // Crear nuevo elemento de lista
+        var nuevaTarea = document.createElement('li');
+        nuevaTarea.innerHTML = '<input type="checkbox" onclick="marcarComoCompletada(this)"> ' +
+                               '<span>' + tareaText + '</span>' +
+                               '<button type="button" onclick="eliminarTarea(this)">Eliminar</button>';
+
+        // Agregar la nueva tarea a la lista
+        document.getElementById('listaTareas').appendChild(nuevaTarea);
+
+        // Limpiar el campo de entrada
+        inputTarea.value = "";
+    }
+}
+
+function marcarComoCompletada(checkbox) {
+    // Cambiar el estilo de la tarea completada
+    var tareaTexto = checkbox.nextElementSibling;
+    tareaTexto.classList.toggle('completed');
+}
+
+function eliminarTarea(button) {
+    // Eliminar la tarea al hacer clic en el botón "Eliminar"
+    var tarea = button.parentNode;
+    tarea.parentNode.removeChild(tarea);
+}
+</script>
+
+</body>
+</html>

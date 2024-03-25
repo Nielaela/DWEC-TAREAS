@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>EJEMPLO TIENDA CLIENTES</title>
+    <style>
+        /* Estilo para resaltar productos completados */
+        .completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>GESTOR CLIENTES</h2>
+
+    <form id="tienda">
+        <ul id="listaClientes">
+            <!-- Lista de compras se agregará aquí -->
+        </ul>
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="text" id="apellido" placeholder="Apellidos">
+        <input type="text" id="DNI" placeholder="DNI">
+        <button type="button" onclick="agregarCliente()">Añadir Cliente</button>
+        <button type="button" onclick="almacenarClientes()">Almacenar</button>
+        <div id="aviso"></div>
+        <br>
+        <button type="button" onclick="mostrarClientes()">Mostrar Clientes</button>
+        <div id="areaClientes"></div>
+    </form>
+
+    <script>
+        // Array para almacenar los clientes
+        var clientes = [];
+
+        function agregarCliente() {
+            var inputNombre = document.getElementById('nombre');
+            var inputApellido = document.getElementById('apellido');
+            var inputDNI = document.getElementById('DNI');
+
+            // validacion del dni por si acaso
+            // if (!validarDNI(inputDNI)) {
+            //     return;
+            // }
+
+            // Crear nuevo elemento de lista
+            var clienteNuevo = document.createElement('li');
+
+            // Crear elementos html para la lista
+            var spanNombre = document.createElement('span');
+            spanNombre.textContent = inputNombre.value + ' ';
+
+            var spanApellido = document.createElement('span');
+            spanApellido.innerHTML = inputApellido.value + ' ';
+
+            var spanDNI = document.createElement('span');
+            // spanDNI.innerHTML = inputDNI.value + ' ';   comentado pq debajo ya se imprime con negrita
+
+            var DNInegrita = document.createElement('b');
+            DNInegrita.textContent = inputDNI.value;
+            // Agregar el elemento <b> al spanDNI
+            spanDNI.appendChild(DNInegrita);
+
+            //añadimos boton eliminar
+            var botonEliminar = document.createElement('button');
+            botonEliminar.type = 'button';
+            botonEliminar.textContent = 'Eliminar';
+
+            // Añadir evento click al botón eliminar
+            botonEliminar.addEventListener('click', function () {
+                eliminarUsuario(this);
+            });
+            // Agregar elementos al nuevo elemento de lista
+            clienteNuevo.appendChild(spanNombre);
+            clienteNuevo.appendChild(spanApellido);
+            clienteNuevo.appendChild(spanDNI);
+            clienteNuevo.appendChild(botonEliminar);
+
+            // Agregar el nuevo cliente a la lista
+            document.getElementById('listaClientes').appendChild(clienteNuevo);
+
+            // Limpiar los campos de entrada
+            inputNombre.value = "";
+            inputApellido.value = "";
+            inputDNI.value = "";
+        }
+
+        function eliminarUsuario(button) {
+            // Eliminar el cliente al hacer clic en el botón "Eliminar"
+            var cliente = button.parentNode;
+            cliente.parentNode.removeChild(cliente);
+        }
+
+        function almacenarClientes() {
+            // Archivar los clientes
+            var listaClientes = document.getElementById('listaClientes');
+            var clientesLista = listaClientes.getElementsByTagName('li');
+
+            for (var i = 0; i < clientesLista.length; i++) {
+                var cliente = clientesLista[i];
+                var spanNombre = cliente.querySelector('span:first-child');
+                var spanApellido = cliente.querySelector('span:nth-child(2)');
+                var spanDNI = cliente.querySelector('span:nth-child(3)');
+
+                // Agregar el cliente al array de clientes archivados
+                clientes.push({
+                    nombre: spanNombre.textContent.trim(),
+                    apellido: spanApellido.textContent.trim(),
+                    dni: spanDNI.textContent.trim()
+                });
+            }
+
+            // Limpiar la lista de clientes
+            listaClientes.innerHTML = "";
+
+            // Puedes mostrar los clientes archivados en la consola o realizar otras acciones
+            console.log("Clientes:", clientes);
+
+            // Mostrar mensaje de éxito
+            var aviso = document.getElementById('aviso');
+            aviso.textContent = 'Clientes registrados';
+            aviso.style.display = 'block';
+
+            // Ocultar el mensaje después de unos segundos (puedes ajustar el tiempo según tus necesidades)
+            setTimeout(function () {
+                aviso.style.display = 'none';
+            }, 3000); // Ocultar después de 3 segundos (3000 milisegundos)
+        }
+
+        function validarDNI(dni) {
+            let patron = /^\d{8}-[a-zA-Z]$/;
+            if (!dni.value.match(patron)) {
+                mostrarError(dni, 'DNI incorrecto. Formato requerido: 12345678-L');
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function mostrarError(elemento, mensaje) {
+            var errorSpan = document.createElement('span');
+            errorSpan.className = 'error';
+            errorSpan.textContent = mensaje;
+
+            elemento.parentNode.appendChild(errorSpan);
+
+            // Ocultar el mensaje después de 3 segundos (puedes ajustar el tiempo según tus necesidades)
+            setTimeout(function () {
+                errorSpan.remove();
+            }, 6000);
+        }
+
+        //funcion que extrae los datos almacenados del array y los imprime
+        function mostrarClientes() {
+            var areaClientes = document.getElementById('areaClientes');
+
+            // Limpiar el área antes de mostrar la lista
+            areaClientes.innerHTML = "";
+
+            // Verificar si hay clientes almacenados
+            if (clientes.length === 0) {
+                areaClientes.textContent = "No hay clientes almacenados.";
+                return;
+            }
+
+            // Crear un elemento de lista para cada cliente y mostrar los detalles
+            for (var i = 0; i < clientes.length; i++) {
+                var cliente = clientes[i];
+                var clienteInfo = document.createElement('p');
+                clienteInfo.textContent = "Nombre: " + cliente.nombre + ", Apellido: " + cliente.apellido + ", DNI: " + cliente.dni;
+                areaClientes.appendChild(clienteInfo);
+            }
+        }
+
+        //variante de la misma funcion pero que se vea en una tabla
+        /*        function mostrarClientes() {
+                    var areaClientes = document.getElementById('areaClientes');
+        
+                    // Limpiar el área antes de mostrar la lista
+                    areaClientes.innerHTML = "";
+        
+                    // Verificar si hay clientes almacenados
+                    if (clientes.length === 0) {
+                        areaClientes.textContent = "No hay clientes almacenados.";
+                        return;
+                    }
+        
+                    // Crear la tabla y sus encabezados
+                    var tabla = document.createElement('table');
+                    //damos formato a la tabla
+                    tabla.setAttribute("style", "border: 1px solid #000;");
+                    //añadimos los elementos
+                    var encabezados = document.createElement('tr');
+                    var nombreEncabezado = document.createElement('th');
+                    nombreEncabezado.textContent = "Nombre";
+                    var apellidoEncabezado = document.createElement('th');
+                    apellidoEncabezado.textContent = "Apellido";
+                    var dniEncabezado = document.createElement('th');
+                    dniEncabezado.textContent = "DNI";
+        
+                    encabezados.appendChild(nombreEncabezado);
+                    encabezados.appendChild(apellidoEncabezado);
+                    encabezados.appendChild(dniEncabezado);
+                    tabla.appendChild(encabezados);
+        
+                    // Agregar filas de clientes a la tabla
+                    for (var i = 0; i < clientes.length; i++) {
+                        var cliente = clientes[i];
+                        var fila = document.createElement('tr');
+                        var celdaNombre = document.createElement('td');
+                        celdaNombre.textContent = cliente.nombre;
+                        var celdaApellido = document.createElement('td');
+                        celdaApellido.textContent = cliente.apellido;
+                        var celdaDNI = document.createElement('td');
+                        celdaDNI.textContent = cliente.dni;
+        
+                        fila.appendChild(celdaNombre);
+                        fila.appendChild(celdaApellido);
+                        fila.appendChild(celdaDNI);
+                        tabla.appendChild(fila);
+                    }
+        
+                    // Agregar la tabla al área de clientes
+                    areaClientes.appendChild(tabla);
+                }
+        */
+    </script>
+
+</body>
+
+</html>
