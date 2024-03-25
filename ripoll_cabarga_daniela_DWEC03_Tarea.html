@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWEC03 TAREA</title>
+    <script>
+        const inicializar = () => {
+            document.getElementById("abrir-ventana").onclick = abrirVentana;
+        }
+        function abrirVentana() {
+            //funcion para abrir una ventana nueva no redimensionable
+            let nuevaVentana = window.open("", "_blank", "width = 800, height = 600, resizable = no");
+
+            //datos a escribir en la nueva ventana
+            let datos = "<h3> Ejemplo de Ventana Nueva </h3>" +
+                "URL Completa: " + window.location.href +
+                "<br>" +
+                "Protocolo utilizado: " + window.location.protocol +
+                "<br>" +
+                "Nombre en código del navegador: " + window.navigator.appCodeName +
+                "<br>";
+
+            //Verificación Java
+            if (navigator.javaEnabled()) {
+                datos += "Java SI disponible en esta ventana"
+            } else {
+                datos += "Java NO disponible en esta ventana"
+            }
+            // Mostrar los datos en la nueva ventana
+            nuevaVentana.document.write(datos);
+
+            // Invocar la función para solicitar datos
+            introducirDatos(nuevaVentana);
+
+        }
+
+        function introducirDatos(ventana) {
+            let nombre = prompt("Introduce tu nombre y apellidos");
+            let dia = parseInt(prompt("Introduce el dia de nacimiento"));
+            let mes = parseInt(prompt("Introduce el mes de nacimiento"));
+            let anio = parseInt(prompt("Introduce el año de nacimiento"));
+
+            //creamos un objeto de tipo Date, hay que tener en cuenta que los meses en Javascrpit están indexados del 0 al 11.
+            let fechaNacimiento = new Date(anio, mes - 1, dia)
+            let fechaActual = new Date();
+            let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+
+            //creamos una función que devuelva el nombre del mes
+            function obtenerNombreMes(mes) {
+                const nombresMeses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+                return nombresMeses[mes - 1];
+            }
+            //formulario con los calculos
+            let resultadoFormulario = "<h1>TAREA DWEC03</H2><HR />" +
+                "Buenos dias " + nombre + "<br>" +
+                "Tu nombre tiene " + nombre.length + " caracteres, incluidos espacios." + "<br>" +
+                "La primera letra A de tu nombre está en la posición: " + nombre.indexOf('a') + "<br>" +
+                "La primera letra A de tu nombre está en la posición: " + nombre.lastIndexOf('a') + "<br>" +
+                "Tu nombre menos las 3 primeras letras es: " + nombre.slice(3) + "<br>" +
+                "Tu nombre todo en mayúsculas es: " + nombre.toUpperCase() + "<br>" +
+                "Tu edad es: " + edad + " años." + "<br>" +
+                "Naciste un feliz " + obtenerNombreMes(mes) + " del año " + fechaNacimiento.getFullYear() + ".<br>" +
+                "El coseno de 180 es: " + Math.cos(180) + "<br>" +
+                "El número mayor de (34,67,23,75,35,19) es: " + Math.max(34, 67, 23, 75, 35, 19) + "<br>" +
+                "Ejemplo de número al azar: " + Math.random() + "<br>"
+
+            // Mostrar resultados en la nueva ventana
+            ventana.document.write(resultadoFormulario);
+
+        }
+    </script>
+</head>
+<!-- Llamamos al metodo inicializar() que activa el "onclick" para el funcionamiento del boton abrirVentana -->
+<body onload="inicializar()">
+    <form>
+        <input type="button" id="abrir-ventana" value="Abrir Ventana">
+    </form>
+
+</body>
+
+</html>

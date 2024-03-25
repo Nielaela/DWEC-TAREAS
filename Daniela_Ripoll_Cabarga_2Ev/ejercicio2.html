@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>EJERCICIO 2. OBTENCION DATOS JSON-JQUERY</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+
+    <h3>Buscar Informacion de Pais</h3>
+    <label for="country">Pais:</label>
+    <input type="text" name="country" id="country" />
+    <button onclick="cargarDatos()">Buscar</button>
+
+    <div id="resultados"></div>
+
+    <script>
+        function cargarDatos() {
+            // Obtener el valor del campo de entrada de texto
+            var nombrePais = document.getElementById('country').value;
+
+            // Construir la URL completa con el pais como parámetro
+            var apiUrl = 'https://restcountries.com/v3.1/name/' + encodeURIComponent(nombrePais);
+
+            // Realizar la solicitud AJAX con jQuery y la URL completa
+            $.ajax({
+                url: apiUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Verificar si hay datos recibidos
+                    if (data.length > 0) {
+                        // Mostrar la información de los datos del pais
+                        var resultados = '<ul>';
+                        data.forEach(function (pais) {
+                            resultados += '<li><b>Capital:</b> ' + pais.capital + '</li>';
+                            resultados += '<li><b>Población:</b> ' + pais.population + '</li>';
+                           // resultados += '<li><b>Moneda:</b> ' + pais.currencies[0].name + '</li>'; //  no consigo obtener la informacion de la moneda
+                            resultados += '<br>';
+                        });
+                        resultados += '</ul>';
+
+                        // Establecer los resultados en el elemento con ID 'resultados'
+                        document.getElementById('resultados').innerHTML = resultados;
+                    } else {
+                        // Mostrar un mensaje si no hay datos encontrados
+                        document.getElementById('resultados').textContent = 'No se encontraron países que hablen ese idioma';
+                    }
+                },
+                error: function () {
+                    // Manejar errores, por ejemplo, mostrando un mensaje de error
+                    document.getElementById('resultados').textContent = 'Error en la solicitud';
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

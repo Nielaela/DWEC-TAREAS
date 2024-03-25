@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>EJERCICIO 1.OBTENCION DATOS JSON-XMLHTTPREQUEST</title>
+</head>
+
+<body>
+
+    <h3>Busqueda de Países por Idioma</h3>
+    <label for="lang">Idioma:</label>
+    <input type="text" name="lang" id="lang" />
+    <button onclick="cargarDatos()">Buscar</button>
+
+    <div id="resultados"></div>
+
+    <script>
+        function cargarDatos() {
+            // Obtener el valor del campo de entrada de texto
+            var idioma = document.getElementById('lang').value;
+
+            // Crear una nueva instancia de XMLHttpRequest
+            var xhr = new XMLHttpRequest();
+
+            // Configurar la solicitud con el idioma en la URL
+            xhr.open('GET', 'https://restcountries.com/v3.1/lang/' + encodeURIComponent(idioma), true);
+
+            xhr.onload = function () {
+                // Verificar si la solicitud fue exitosa
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // Parsear la respuesta JSON
+                    var data = JSON.parse(xhr.responseText);
+
+                    // Mostrar los paises 
+                    var resultados = '<ul>';
+                    data.forEach(function (pais) {
+                        resultados += '<li><b>País:</b> ' + pais.name.common + '</li>';
+                        resultados += '<br>';
+                    });
+                    resultados += '</ul>';
+
+                    // Establecer los resultados en el elemento con ID 'resultados'
+                    document.getElementById('resultados').innerHTML = resultados;
+                } else {
+                    // Manejar errores, por ejemplo, mostrando un mensaje de error
+                    document.getElementById('resultados').textContent = 'No se pudo cargar la información de la API';
+                }
+            };
+
+            xhr.onerror = function () {
+                // Manejar errores de red, por ejemplo, mostrando un mensaje de error
+                document.getElementById('resultados').textContent = 'Error en la solicitud a la API';
+            };
+
+            // Enviar la solicitud
+            xhr.send();
+        }
+    </script>
+
+</body>
+
+</html>

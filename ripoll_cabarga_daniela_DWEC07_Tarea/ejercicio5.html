@@ -1,0 +1,52 @@
+<!-- Implementar una página web que, haciendo uso de JavaScript y jQuery, 
+acceda a los datos de la web que te devuelve datos en formato JSON y los muestre en dicha página. -->
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>EJERCICIO 5. TAREA 7. OBTENCION DATOS JSON-JQUERY</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</head>
+<body>
+
+<h3>Ofertas de juegos. JQUERY</h3>
+<pre id="game-deals">Cargando...</pre>
+
+<script>
+// URL completa con parámetros
+var apiUrl = 'https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15';
+
+// Realizar la solicitud AJAX con jQuery y URL completa
+$.ajax({
+    url: apiUrl,
+    method: 'GET',
+    dataType: 'json',
+    success: function(data) {
+        // Filtrar y mostrar solo algunos campos de los datos
+        var filteredData = data.map(function(game) {
+            return {
+                title: game.title,
+                salePrice: game.salePrice,
+                normalPrice: game.normalPrice,
+                metacriticScore: game.metacriticScore
+            };
+        });
+
+        // Mostrar los resultados JSON formateados en la página
+        document.getElementById('game-deals').textContent = JSON.stringify(filteredData, null, 2);
+    },
+    error: function() {
+        // Manejar errores, por ejemplo, mostrando un mensaje de error
+        document.getElementById('game-deals').textContent = 'Error en la solicitud';
+    }
+});
+</script>
+
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,45 @@
+<!-- Apartado 2
+
+Sabiendo que cuando desplazamos 1 bit a la derecha dividimos un entero por 2 y cuando lo desplazamos a la izquierda estamos multiplicando por 2. Tu aplicación también debe imprimir el resultado de las siguientes operaciones empleando desplazamiento de bits:
+
+    125 / 8 = (estaría dividido por 3 bits)
+    40 x 4 = (multiplicado por 2 bits)
+    25 / 2 = (dividido por 1 bit)
+    10 x 16 = (multiplicar por 6 bits)
+
+    Desplazar bits a la derecha es equivalente a dividir por potencias de 2, y desplazar bits a la izquierda es equivalente a multiplicar por potencias de 2 -->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <h3>Operaciones con bits</h3>
+    <div id="resultados"></div>
+
+    <script>
+        let lista = "";
+        lista += '<ul>'
+        let operacionesBit = document.getElementById('resultados');
+        let resultado1 = 125 >> 3;
+        let resultado2 = 40 << 2;
+        let resultado3 = 25 >> 1;
+        let resultado4 = 10 << 4;
+
+        lista += `<li> 125 / 8 = 125 >> 3 = ${resultado1} (desplazamiento a la derecha de 3 bits) </li>`;
+        lista += `<li> 40 x 4 = 40 << 2 = ${resultado2} (desplazamiento a la izquierda de 2 bits) </li>`;
+        lista += `<li> 25 / 2 = 25 >> 1 = ${resultado3} (desplazamiento a la derecha de 1 bit) </li>`;
+        lista += `<li> 10 x 16 = 10 << 4 = ${resultado4} (desplazamiento a la izquierda de 4 bits) </li>`;
+
+        lista += '</ul>'
+        operacionesBit.innerHTML = lista;
+
+    </script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Contacto</title>
+    <link type="text/css" rel="stylesheet" href="formulario.css" />
+
+<body>
+
+    <div id="formContainer"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Creamos la variable del elemento formContainer, es la que al final se le unirá el resto de elementos que definimos más adelante
+            var formContainer = document.getElementById("formContainer");
+
+            // Creamos la variable form que es la que guardará el resto de elementos con appendchild
+            var form = document.createElement("form");
+
+            // Resto de campos del formulario, les añadimos la id para poder trabajar luego con ella en el envio de datos al servidor
+            var nombreLabel = document.createElement("label");
+            nombreLabel.textContent = "Nombre:";
+            var nombreInput = document.createElement("input");
+            nombreInput.type = "text";
+            nombreInput.id = "nombre";
+
+            var emailLabel = document.createElement("label");
+            emailLabel.textContent = "Email:";
+            var emailInput = document.createElement("input");
+            emailInput.type = "email";
+            emailInput.id = "email";
+
+            var mensajeLabel = document.createElement("label");
+            mensajeLabel.textContent = "Mensaje:";
+            var mensajeTextarea = document.createElement("textarea");
+            mensajeTextarea.id = "mensaje";
+
+            // Añadimos cada elemento al formulario 
+            form.appendChild(nombreLabel);
+            form.appendChild(nombreInput);
+            form.appendChild(emailLabel);
+            form.appendChild(emailInput);
+            form.appendChild(mensajeLabel);
+            form.appendChild(mensajeTextarea);
+
+            // creamos el boton de envio que luego uniremos al formulario
+            var submitButton = document.createElement("button");
+            submitButton.textContent = "Enviar";
+            submitButton.type = "submit"; 
+
+            // Agregar evento al botón de envío
+            submitButton.addEventListener("click", function () {
+                // Validar los datos antes de enviar
+                if (validarDatos()) {
+                    // Obtener los valores de los campos del formulario por ID
+                    var nombre = document.getElementById("nombre").value.trim();
+                    var email = document.getElementById("email").value.trim();
+                    var mensaje = document.getElementById("mensaje").value.trim();
+
+                    // Realizar la solicitud POST a la URL específica
+                    enviarFormulario(nombre, email, mensaje);
+                }
+            });
+
+            // Agregar botón al formulario
+            form.appendChild(submitButton);
+
+            // Agregamos todo el formulario al contenedor inicial
+            formContainer.appendChild(form);
+
+            // Función para validar los datos del formulario
+            function validarDatos() {
+                var nombre = document.getElementById("nombre").value.trim();
+                var email = document.getElementById("email").value.trim();
+                var mensaje = document.getElementById("mensaje").value.trim();
+
+                if (nombre === "" || email === "" || mensaje === "") {
+                    alert("Todos los campos son obligatorios");
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Función para enviar el formulario
+            function enviarFormulario(nombre, email, mensaje) {
+                // Crear objeto FormData y agregar los valores
+                var datosFormulario = new FormData();
+                datosFormulario.append("nombre", nombre);
+                datosFormulario.append("email", email);
+                datosFormulario.append("mensaje", mensaje);
+
+                // Enviar los datos mediante una solicitud POST a la URL específica
+                fetch("https://example.com/contacto", {
+                    method: "POST",
+                    body: datosFormulario
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor si es necesario
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error("Error al enviar el formulario:", error);
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>

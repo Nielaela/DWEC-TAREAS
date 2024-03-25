@@ -1,0 +1,63 @@
+<!-- Implementar una página web que, haciendo uso de JavaScript y del objeto XMLHttpRequest, acceda a los datos de la web que te devuelve datos en formato XML,
+     mediante una petición AJAX, y los muestre en dicha página. -->
+	 <!DOCTYPE html>
+	 <html lang="es">
+	 <head>
+		 <meta charset="UTF-8">
+		 <title>EJERCICIO 2. TAREA 7. OBTENCION DATOS XML-XMLHTTPREQUEST</title>
+	 </head>
+	 <body>
+	 
+	 <h3>Resultado de la API GetTheData con  XMLHttpRequest (Conversión de datos)</h3>
+	 <div id="api-results">Cargando...</div>
+	 
+	 <script>
+	 // Crear una nueva instancia de XMLHttpRequest
+	 var xhr = new XMLHttpRequest();
+	 
+	 // Configurar la solicitud
+	 xhr.open('GET', 'https://api.getthedata.com/bng2latlong/326897/673919/xml', true);
+	 
+	 xhr.onload = function() {
+		 // Verificar si la solicitud fue exitosa
+		 if (xhr.status >= 200 && xhr.status < 300) {
+			 // Obtener la respuesta XML
+			 var xmlDoc = xhr.responseXML;
+	 
+			 // Acceder a los elementos XML
+			 var status = xmlDoc.getElementsByTagName('status')[0].textContent;
+			 var easting = xmlDoc.getElementsByTagName('easting')[0].textContent;
+			 var northing = xmlDoc.getElementsByTagName('northing')[0].textContent;
+			 var latitude = xmlDoc.getElementsByTagName('latitude')[0].textContent;
+			 var longitude = xmlDoc.getElementsByTagName('longitude')[0].textContent;
+	 
+			 // Mostrar los resultados
+			 var resultsHtml = `
+				 <p>Status: ${status}</p>
+				 <p>Easting: ${easting}</p>
+				 <p>Northing: ${northing}</p>
+				 <p>Latitude: ${latitude}</p>
+				 <p>Longitude: ${longitude}</p>
+			 `;
+	 
+			 document.getElementById('api-results').innerHTML = resultsHtml;
+		 } else {
+			 // Manejar errores, por ejemplo, mostrando un mensaje de error
+			 document.getElementById('api-results').textContent = 'No se pudo cargar la información';
+		 }
+	 };
+	 
+	 xhr.onerror = function() {
+		 // Manejar errores de red, por ejemplo, mostrando un mensaje de error
+		 document.getElementById('api-results').textContent = 'Error en la solicitud';
+	 };
+	 
+	 // Enviar la solicitud
+	 xhr.send();
+	 </script>
+	 
+	 </body>
+	 </html>
+	 
+
+	 

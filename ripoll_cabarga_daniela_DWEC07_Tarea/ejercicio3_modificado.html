@@ -1,0 +1,63 @@
+<!-- Implementar una página web que, haciendo uso de JavaScript y del objeto XMLHttpRequest, acceda a los datos de la web que te devuelve datos en formato JSON, 
+mediante una petición AJAX, y los muestre en dicha página. -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>EJERCICIO 3. TAREA 7. OBTENCION DATOS JSON-XMLHTTPREQUEST</title>
+</head>
+
+<body>
+
+    <h3>Amiibos de la Serie "Animal Crossing"</h3>
+    <div id="animal-crossing-amiibos">Pulse el botón para obtener los datos.</div>
+    <button onclick="cargarDatos()">Cargar Datos</button>
+
+    <script>
+        function cargarDatos() {
+
+
+            // Crear una nueva instancia de XMLHttpRequest
+            var xhr = new XMLHttpRequest();
+
+            // Configurar la solicitud
+            xhr.open('GET', 'https://www.amiiboapi.com/api/amiibo?amiiboSeries=Animal Crossing', true);
+
+            xhr.onload = function () {
+                // Verificar si la solicitud fue exitosa
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // Parsear la respuesta JSON
+                    var data = JSON.parse(xhr.responseText);
+
+                    // Mostrar la información de los amiibos de la serie "Animal Crossing"
+                    var amiiboData = '<ul>';
+                    //iteracion del array de objetos amiibo, para mostrar los datos de cada uno
+                    data.amiibo.forEach(function (amiibo) {
+                        amiiboData += '<li><b>Nombre:</b> ' + amiibo.name + '</li>';
+                        amiiboData += '<li><b>Personaje:</b> ' + amiibo.character + '</li>';
+                        amiiboData += '<li><b>Serie:</b> ' + amiibo.amiiboSeries + '</li>';
+                        amiiboData += '<br>';
+                    });
+                    amiiboData += '</ul>';
+
+                    document.getElementById('animal-crossing-amiibos').innerHTML = amiiboData;
+                } else {
+                    // Manejar errores, por ejemplo, mostrando un mensaje de error
+                    document.getElementById('animal-crossing-amiibos').textContent = 'No se pudo cargar la información de la API Amiibo';
+                }
+            };
+
+            xhr.onerror = function () {
+                // Manejar errores de red, por ejemplo, mostrando un mensaje de error
+                document.getElementById('animal-crossing-amiibos').textContent = 'Error en la solicitud a la API Amiibo';
+            };
+
+            // Enviar la solicitud
+            xhr.send();
+        }
+    </script>
+
+</body>
+
+</html>
